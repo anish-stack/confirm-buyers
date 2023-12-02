@@ -1,0 +1,9 @@
+mongodb+srv://happycoding41:BbekwUIRB8MpJl0X@cluster0.xyqeore.mongodb.net/?retryWrites=true&w=majority
+
+routes={
+
+for adminRoutes={use /mangement}
+for ownRoutes = { use /user}
+for routes = { use /api }
+
+}
