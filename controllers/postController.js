@@ -1,7 +1,10 @@
 const PostBuyModal = require('../modals/PostBuyreq')
 const CallBack = require('../modals/getCallBack')
 const Registration = require("../modals/registrationModal");
-
+const CompanyDetails = require("../modals/ComapnyDetails");
+const ProductModel = require("../modals/ProductDetails")
+const FetureProduct = require('../modals/FetureProduct')
+const BuyerFake = require("../modals/FakeBuyers")
 exports.PostRequirement = async (req, res) => {
     try {
         // Check if user information is attached to the request
@@ -262,3 +265,117 @@ exports.CallBackAll = async (req,res)=>{
         });
     }
 }
+
+exports.anySearch = async (req, res) => {
+    try {
+        const anyInput = req.params.anyInput;
+
+        // Create a case-insensitive regex with at least 3 letters
+        const regex = new RegExp(`\\b${anyInput}\\w*\\b`, 'i');
+
+        // Check this regex in the CompanyDetails model for companyName
+        const companyResults = await CompanyDetails.find({ companyName: { $regex: regex } });
+
+        if (companyResults.length > 0) {
+            // If there are matches in CompanyDetails, send the response
+            return res.json({ results: companyResults, model: 'CompanyDetails' });
+        }
+
+        // If no matches in CompanyDetails, check in ProductModel for ProductName
+        const productResults = await CompanyDetails.find({ products: { $regex: regex } });
+
+        if (productResults.length > 0) {
+            // If there are matches in ProductModel, send the response
+            return res.json({ results: productResults, model: 'CompanyDetails' });
+        }
+
+        // If no matches in both models, send a generic response
+        return res.json({ 
+            success:false,
+            message: 'No results found'
+         });
+        
+    } catch (error) {
+        console.error(error);
+        // Handle the error appropriately (send an error response, log, etc.)
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+exports.getCompanyDetailsById = async (req, res) => {
+    try {
+      const { companyId } = req.params;
+  
+      // Check in the CompanyDetails model
+      const existCompany = await CompanyDetails.findById(companyId);
+  
+      if (!existCompany) {
+        return res.status(404).json({ error: 'Company not found' });
+      }
+  
+      // If the company is found, send the details in the response
+      return res.status(200).json({ company: existCompany });
+    } catch (error) {
+      console.error('Error getting company details by ID:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
+
+  exports.createFakeBuyers = async (req, res) => {
+    try {
+      const {
+        companyName,
+        companyCity,
+        Date,
+        Product,
+        contactNumber,
+      } = req.body;
+  
+      const newBuyerFake = new BuyerFake({
+        companyName,
+        companyCity,
+        Date,
+        Product,
+        contactNumber,
+      });
+  
+      const savedBuyerFake = await newBuyerFake.save();
+  
+      res.status(201).json(savedBuyerFake);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+  
+  exports.deleteFakeBuyers = async (req, res) => {
+    try {
+      const {buyerId} = req.params;
+  
+      const deletedBuyerFake = await BuyerFake.findByIdAndDelete(buyerId);
+  
+      if (!deletedBuyerFake) {
+        return res.status(404).json({ error: "Buyer not found" });
+      }
+  
+      res.status(200).json({
+        sucess:true,
+        deletedBuyerFake
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+  
+  exports.getFakeBuyers = async (req, res) => {
+    try {
+      const fakeBuyers = await BuyerFake.find();
+  
+      res.status(200).json(fakeBuyers);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
