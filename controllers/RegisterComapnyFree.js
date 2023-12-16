@@ -526,29 +526,73 @@ exports.BussinessProducts = async (req, res) => {
 
 exports.updateBusinessProducts = async (req, res) => {
   try {
-    // Extract product details from the request body
-    const { Division, Contactperson, Country, city, Address, pincode, contactno, companyState, ...updatedProductDetails } = req.body;
+    const productId = req.params.productId;
+    const { ProductName, ProductCategory, ProductImage, ProductPrice, BusinessType, ProductStatus, Description } = req.body;
 
-    // Check if user is authenticated
-    if (!req.user || !req.user.id) {
-      return res.status(401).send('Unauthorized');
+    // Find the product by ID
+    const existingProduct = await ProductModel.findById(productId);
+
+    if (!existingProduct) {
+      return res.status(404).json({ message: 'Product not found' });
     }
 
-    // Find and update the product details associated with the user ID
-    const updatedProduct = await ProductModel.findOneAndUpdate({ user: req.user.id }, { ...updatedProductDetails, Division, Contactperson, Country, city, Address, pincode, contactno, companyState }, { new: true });
+    // Check if the authenticated user owns the product
+    if (existingProduct.user.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'You are not authorized to update this product' });
+    }
+
+    // Update the product properties conditionally
+    if (ProductName) existingProduct.ProductName = ProductName;
+    if (ProductCategory) existingProduct.ProductCategory = ProductCategory;
+    if (ProductImage) existingProduct.ProductImage = ProductImage;
+    if (ProductPrice) existingProduct.ProductPrice = ProductPrice;
+    if (BusinessType) existingProduct.BusinessType = BusinessType;
+    if (ProductStatus !== undefined) existingProduct.ProductStatus = ProductStatus;
+    if (Description) existingProduct.Description = Description;
+
+    // Save the updated product to the database
+    const updatedProduct = await existingProduct.save();
 
     res.status(200).json({
       success: true,
-      message: 'Product details updated successfully',
+      message: 'Product updated successfully',
       productDetails: updatedProduct,
     });
   } catch (error) {
-    console.error('Error updating product details:', error);
+    console.error('Error updating product:', error);
     res.status(500).json({
       success: false,
-      message: 'Error updating product details',
+      message: 'Error updating product',
       error: error.message,
     });
+  }
+};
+
+
+exports.deleteBussinessProducts = async (req, res) => {
+  try {
+    // Extract the product ID from the request parameters
+    const productId = req.params.productId;
+
+    // Check if the product exists
+    const existingProduct = await ProductModel.findById(productId);
+
+    if (!existingProduct) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Check if the authenticated user owns the product
+    if (!existingProduct.user || existingProduct.user.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'You are not authorized to delete this product' });
+    }
+
+    // Delete the product
+    await existingProduct.deleteOne();
+
+    res.status(200).json({ success: true, message: 'Product deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    res.status(500).json({ success: false, message: 'Error deleting product', error: error.message });
   }
 };
 
@@ -678,4 +722,104 @@ exports.getMyCompanyDetails = async (req, res) => {
     });
   }
 };
+
+
+exports.getAllCompanyDetails = async (req, res) => {
+  try {
+    // Get all companies from the database
+    const companies = await CompanyDetails.find();
+
+    // Check if there are any companies
+    if (!companies || companies.length === 0) {
+      return res.status(404).json({ message: 'No companies found' });
+    }
+
+    // Return the list of companies
+    res.status(200).json({ companies });
+  } catch (error) {
+    console.error('Error fetching company details:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+exports.singleCompanyDetails = async (req, res) => {
+  try {
+    const companyId = req.params.companyId;
+
+    // Check if the company with the given ID exists
+    const company = await CompanyDetails.findById(companyId);
+
+    if (!company) {
+      return res.status(404).json({ message: 'Company not found' });
+    }
+
+    // If the company is found, send its details in the response
+    res.status(200).json({ company });
+  } catch (error) {
+    console.error('Error fetching single company details:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+exports.getComapnyDetailsWithProductNameAndCompanyName = async (req, res) => {
+  try {
+    const input = req.params.input.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+
+    // Assuming you have a CompanyDetails model with the necessary fields and relationships
+    const companyDetails = await CompanyDetails.findOne({
+      $or: [
+        { companyName: { $regex: input, $options: 'i' } }, // Case-insensitive regex match for companyName
+        { products: { $in: [input] } }, // Check if input is in the products array
+      ],
+    }).exec();
+
+    if (!companyDetails) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    // Return the details of the matching company
+    res.json({ companyDetails });
+  } catch (error) {
+    console.error('Error fetching company details:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+exports.getBussinessProduct = async (req, res) => {
+  try {
+    // Ensure the user is authenticated
+    if (!req.user || !req.user.id) {
+      return res.status(401).send("You are not authorized");
+    }
+
+    // Retrieve user ID from the authenticated user
+    const userId = req.user.id;
+
+    // Find products associated with the user
+    const userProducts = await ProductModel.find({ user: userId });
+
+    if (!userProducts || userProducts.length === 0) {
+      // If no products are found for the user, you might want to handle this case
+      return res.status(404).json({ message: 'No products found for the user' });
+    }
+
+    // Return the user's products in the response
+    res.status(200).json({
+      success: true,
+      message: 'Products retrieved successfully',
+      products: userProducts,
+    });
+  } catch (error) {
+    console.error('Error retrieving products:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error retrieving products',
+      error: error.message,
+    });
+  }
+};
+
+
+
 
