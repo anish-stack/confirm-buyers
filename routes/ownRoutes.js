@@ -1,12 +1,15 @@
 const express = require('express');
 const { protect } = require('../middlewares/auth');
-const { getMyCompanyDetails, getStatutory } = require('../controllers/RegisterComapnyFree'); 
+const { getMyCompanyDetails,singleCompanyDetails,getComapnyDetailsWithProductNameAndCompanyName, getStatutory,getAllCompanyDetails } = require('../controllers/RegisterComapnyFree'); 
 const { getAllBuyFaq, getAllSellerFaq, getAllMainSlider, getAllCompanySlider,getAllCounteryWeWillDeal,getAllContent,getTestinomial,getAllSalesSlider, getAllLeads, getAllFetureProducts, getSingleProducts } = require('../controllers/Content');
 const { PostRequirementAll,CallBackAll, UserPostRequirementAll, userPostRequirementsUpdate, UserPostRequirementDelete } = require('../controllers/postController');
 
 const router = express.Router();
 
 // Route to handle registration logic
+router.get("/getAllCompanyDetails",getAllCompanyDetails)
+router.get("/singleCompanyDetails/:companyId",singleCompanyDetails)
+
 router.post('/getMyCompanyDetails', protect, getMyCompanyDetails);
 router.get('/getBuyerFaq', getAllBuyFaq);
 router.get('/getSellerFaq', getAllSellerFaq);
@@ -25,5 +28,8 @@ router.get('/allLeads', getAllLeads);
 router.get('/getAllFetureProducts', getAllFetureProducts);
 router.get('/getAllFetureProducts/:productid', getSingleProducts);
 router.get('/getStatutory',protect, getStatutory);
+
+router.get('/company/:input',getComapnyDetailsWithProductNameAndCompanyName);
+
 
 module.exports = router;
