@@ -11,9 +11,11 @@ const {
     updateBusinessProducts,
     resendOtp,
     Login,
-    addStatutory
+    addStatutory,
+    getBussinessProduct,
+    deleteBussinessProducts
 } = require('../controllers/RegisterComapnyFree');
-const { PostRequirement, getACallBack } = require('../controllers/postController');
+const { PostRequirement, getACallBack, anySearch, getCompanyDetailsById, createFakeBuyers, getFakeBuyers, deleteFakeBuyers } = require('../controllers/postController');
 
 const router = express.Router();
 
@@ -29,11 +31,21 @@ router.post('/callback',getACallBack);
 
 router.post('/add-BranchDetails', protect, BranchDetails);
 router.post('/add-Product', protect, BussinessProducts);
+router.get("/getBussinessProduct",protect,getBussinessProduct)
 router.post('/add-addStatutory', protect, addStatutory);
-
+router.delete("/deleteBussinessProducts/:productId",protect,deleteBussinessProducts)
 // Add routes for updating entities
 router.put('/update-companydetails', protect, updateCompanyDetails);
 router.put('/update-branchdetails', protect, updateBranchDetails);
-router.put('/update-businessproducts', protect, updateBusinessProducts);
+router.put('/update-businessproducts/:productId', protect, updateBusinessProducts);
+
+
+router.get("/anySearch/:anyInput",anySearch)
+router.get("/companydetails/:companyId",getCompanyDetailsById)
+
+
+router.post('/create-buyers',createFakeBuyers)
+router.get('/get-buyers',getFakeBuyers)
+router.delete('/delete-buyers/:buyerId',deleteFakeBuyers)
 
 module.exports = router;
