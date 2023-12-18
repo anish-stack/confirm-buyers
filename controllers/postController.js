@@ -379,3 +379,53 @@ exports.getCompanyDetailsById = async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   };
+
+
+
+
+  // search product accrding tot any input in fetautreproduct
+  exports.anyFeatureProducts = async (req, res) => {
+    try {
+      const { anyinput } = req.params;
+  
+      // Split the input into individual words
+      const inputWords = anyinput.split(/\s+/);
+  
+      // Create an array of regular expressions for each word
+      const regexArray = inputWords.map(word => new RegExp(`\\b${word}\\w*\\b`, 'i'));
+  
+      // Use $in with $and to match all words
+      const productsByKeyword = await FetureProduct.find({ $and: regexArray.map(regex => ({ keyword: { $in: [regex] } })) });
+  
+      // If matches found by keyword, try to match in title
+      if (productsByKeyword.length > 0) {
+        const productsByTitle = await FetureProduct.find({ title: { $in: inputWords.map(word => new RegExp(`\\b${word}\\w*\\b`, 'i')) } });
+  
+        // If matches found by title, merge the arrays and filter out duplicates
+        if (productsByTitle.length > 0) {
+          const allProducts = [...productsByKeyword, ...productsByTitle];
+          const uniqueProducts = allProducts.filter(
+            (product, index, self) => index === self.findIndex((p) => p.title === product.title)
+          );
+  
+          return res.json(uniqueProducts);
+        }
+  
+        return res.json(productsByKeyword);
+      }
+  
+      // If no matches in keywords, try to match in title
+      const productsByTitle = await FetureProduct.find({ title: { $in: inputWords.map(word => new RegExp(`\\b${word}\\w*\\b`, 'i')) } });
+  
+      // If no matches in title, return success: false and message
+      if (productsByTitle.length === 0) {
+        return res.json({ success: false, message: `No product found with Keyword ${anyinput}` });
+      }
+  
+      return res.json(productsByTitle);
+    } catch (error) {
+      console.error('Error fetching feature products:', error);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  };
+  
