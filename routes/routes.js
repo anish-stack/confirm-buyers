@@ -15,7 +15,8 @@ const {
     getBussinessProduct,
     deleteBussinessProducts
 } = require('../controllers/RegisterComapnyFree');
-const { PostRequirement, getACallBack, anySearch, getCompanyDetailsById, createFakeBuyers, getFakeBuyers, deleteFakeBuyers } = require('../controllers/postController');
+
+const { PostRequirement, getACallBack, anySearch, getCompanyDetailsById, createFakeBuyers, getFakeBuyers, deleteFakeBuyers, anyFeatureProducts } = require('../controllers/postController');
 
 const router = express.Router();
 
@@ -42,6 +43,9 @@ router.put('/update-businessproducts/:productId', protect, updateBusinessProduct
 
 router.get("/anySearch/:anyInput",anySearch)
 router.get("/companydetails/:companyId",getCompanyDetailsById)
+
+
+router.get("/buyers/:anyinput",anyFeatureProducts)
 
 
 router.post('/create-buyers',createFakeBuyers)
