@@ -1402,7 +1402,7 @@ exports.getAllSalesSlider = async (req,res)=>{
 
 exports.getAllLeads = async (req, res) => {
     try {
-        const allLeads = await PostBuySchema.find();
+        const allLeads = await leadsSchemas.find();
 
         res.status(200).json({
             success: true,
