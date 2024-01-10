@@ -294,6 +294,7 @@ exports.addCompanyDetails = async (req, res) => {
       companyPincode,
       primaryBusiness,
       products,
+      MemberType,
       Gst,
     } = req.body;
 
@@ -328,6 +329,7 @@ exports.addCompanyDetails = async (req, res) => {
       primaryBusiness,
       products,
       Gst,
+      MemberType,
       user: userId,
     });
 
@@ -348,7 +350,6 @@ exports.addCompanyDetails = async (req, res) => {
     });
   }
 };
-
 exports.updateCompanyDetails = async (req, res) => {
   try {
     // Extract updated company details from the request body
