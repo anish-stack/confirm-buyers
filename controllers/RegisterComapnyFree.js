@@ -105,11 +105,11 @@ exports.RegisterCompany = async (req, res) => {
     if (error.code === 11000) {
       // Extract duplicate key information from the error
       const duplicateKeyInfo = Object.keys(error.keyValue)[0];
-      const errorMessage = Duplicate entry. The field '${duplicateKeyInfo}' is already registered.;
+    
 
       return res.status(400).json({
         success: false,
-        error: errorMessage,
+        error: "Error",
       });
     }
 
