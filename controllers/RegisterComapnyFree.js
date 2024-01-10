@@ -268,7 +268,7 @@ exports.resendOtp = async (req, res) => {
     const emailOptions = {
       email: email,
       subject: "New OTP for Registration",
-      message: `Your new OTP for registration is: ${generatedOTP}`,
+      message: Your new OTP for registration is: ${generatedOTP},
     };
 
     await sendEmail(emailOptions);
@@ -300,7 +300,6 @@ exports.addCompanyDetails = async (req, res) => {
       companyPincode,
       primaryBusiness,
       products,
-      MemberType,
       Gst,
     } = req.body;
 
@@ -335,7 +334,6 @@ exports.addCompanyDetails = async (req, res) => {
       primaryBusiness,
       products,
       Gst,
-      MemberType,
       user: userId,
     });
 
@@ -356,6 +354,7 @@ exports.addCompanyDetails = async (req, res) => {
     });
   }
 };
+
 exports.updateCompanyDetails = async (req, res) => {
   try {
     // Extract updated company details from the request body
@@ -826,7 +825,3 @@ exports.getBussinessProduct = async (req, res) => {
     });
   }
 };
-
-
-
-
