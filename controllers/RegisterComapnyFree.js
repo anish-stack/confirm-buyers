@@ -27,7 +27,7 @@ exports.RegisterCompany = async (req, res) => {
     if (missingFields.length > 0) {
       return res.status(401).json({
         success: false,
-        error: `Please fill the following fields: ${missingFields.join(', ')}`,
+        error: Please fill the following fields: ${missingFields.join(', ')},
       });
     }
 
@@ -96,12 +96,18 @@ exports.RegisterCompany = async (req, res) => {
     await sendEmail(emailOptions);
 
     // Only send the token, remove the res.status(200).json()
-    sendToken(savedRegistration, 200, res);
+    
+    // return res.status(200).json({
+    //   success: true,
+   
+    //   message: Register Success Verify Otp${generatedOTP}
+    // });
+    sendToken(savedRegistration, 200, res,generatedOTP);
   } catch (error) {
     if (error.code === 11000) {
       // Extract duplicate key information from the error
       const duplicateKeyInfo = Object.keys(error.keyValue)[0];
-      const errorMessage = `Duplicate entry. The field '${duplicateKeyInfo}' is already registered.`;
+      const errorMessage = Duplicate entry. The field '${duplicateKeyInfo}' is already registered.;
 
       return res.status(400).json({
         success: false,
