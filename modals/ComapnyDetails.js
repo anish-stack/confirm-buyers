@@ -32,6 +32,10 @@ const companyDetailsSchema = new mongoose.Schema({
   Desigination: {
     type: String,
   },
+  MemberType: {
+    type: String,
+    default: 'free'
+  },
   BranchDetails: {
     type: [
       {
