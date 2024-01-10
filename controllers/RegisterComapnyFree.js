@@ -295,7 +295,8 @@ exports.addCompanyDetails = async (req, res) => {
       companyWebsite,
       companyState,
       companyCity,
-      companyPincode,
+      companyPincode,MemberType,
+      
       primaryBusiness,
       products,
       Gst,
@@ -329,6 +330,7 @@ exports.addCompanyDetails = async (req, res) => {
       companyState,
       companyCity,
       companyPincode,
+      MemberType,
       primaryBusiness,
       products,
       Gst,
