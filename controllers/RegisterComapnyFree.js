@@ -23,14 +23,12 @@ exports.RegisterCompany = async (req, res) => {
     if (!CompanyCity) missingFields.push('CompanyCity');
     if (!Password) missingFields.push('Password');
 
-    // Check if any field is empty
     if (missingFields.length > 0) {
       return res.status(401).json({
         success: false,
-        error: Please fill the following fields: ${missingFields.join(', ')},
+        error: 'Please fill the following fields: ' + missingFields.join(', '),
       });
     }
-
     //hasPassword
     const saltRounds = 10;
     const hashPassword = bcrypt.hashSync(Password, saltRounds);
