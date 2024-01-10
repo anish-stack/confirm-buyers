@@ -1,4 +1,4 @@
-const sendToken = async (user, statusCode, res) => {
+const sendToken = async (user, statusCode, res,generatedOTP) => {
     try {
       const token = user.getJwtToken(); // Assuming 'getJwtToken' is a method in your user model to generate the JWT token
       const expirationInHours = parseInt(process.env.JWT_EXPIRES_IN || '4d');
@@ -21,6 +21,7 @@ const sendToken = async (user, statusCode, res) => {
         success: true,
         login: user,
         token,
+        generatedOTP
       });
     } catch (error) {
       console.error('Error sending token:', error);
@@ -33,4 +34,3 @@ const sendToken = async (user, statusCode, res) => {
   };
   
   module.exports = sendToken;
-  
