@@ -47,7 +47,7 @@ router.delete('/delete-slider/:sliderId', deleteSlider);
 // Route to add a new Feture Product item
 router.post('/add-Product', addFetureProduct);
 router.put('/update-Product/:fetureId', updateFetureProduct);
-router.delete('/delete-slider/:fetureId', deleteFetureProduct);
+router.delete('/deleteFetureProduct/:fetureId', deleteFetureProduct);
 
 // Route to add a new slider item
 router.post('/comapny/add-slider', CompanyaddSlider);
