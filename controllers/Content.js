@@ -1237,7 +1237,7 @@ exports.deleteFetureProduct = async (req, res) => {
             });
         }
 
-        await existingFetureProduct.remove();
+        await existingFetureProduct.deleteOne(); // Use deleteOne instead of remove
 
         res.status(200).json({
             success: true,
