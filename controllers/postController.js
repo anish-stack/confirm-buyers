@@ -25,22 +25,13 @@ exports.PostRequirement = async (req, res) => {
         }
 
         // Use destructuring directly in the function parameters
-        const { ProductAndService, Qunatity, SupplierPreference, MultipleStates } = req.body;
+        const {ProductName, Qunatity, Category, TypeOfPacking,Message } = req.body;
 
-        // // Validate the required fields
-        // if (!ProductAndService || !Qunatity || !SupplierPreference) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: 'ProductAndService, Qunatity, and SupplierPreference are required fields.',
-        //     });
-        // }
+  
 
         // Create a new document using the PostBuy model
         const newPostRequirement = new PostBuyModal({
-            ProductAndService,
-            Qunatity,
-            SupplierPreference,
-            MultipleStates,
+          ProductName, Qunatity, Category, TypeOfPacking,Message
             user: userId, // Assuming you want to associate the post with the user
         });
 
