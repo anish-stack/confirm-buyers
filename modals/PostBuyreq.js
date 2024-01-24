@@ -1,19 +1,22 @@
 const mongoose = require('mongoose');
 
 const PostBuySchema = new mongoose.Schema({
-    ProductAndService: {
+    ProductName: {
         type: String,
         required: true,
     },
     Qunatity: {
         type: String,
     },
-    SupplierPreference: {
-        type: Array,
+     Category: {
+        type: String,
+    },
+    TypeOfPacking: {
+        type: String,
         
     },
-    MultipleStates: {
-        type: [String],
+    Message: {
+        type: String,
     },
     user:{
         type:"String"
