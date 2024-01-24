@@ -26,12 +26,9 @@ exports.PostRequirement = async (req, res) => {
 
         // Use destructuring directly in the function parameters
         const {ProductName, Qunatity, Category, TypeOfPacking,Message } = req.body;
-
-  
-
         // Create a new document using the PostBuy model
         const newPostRequirement = new PostBuyModal({
-          ProductName, Qunatity, Category, TypeOfPacking,Message
+          ProductName, Qunatity, Category, TypeOfPacking,Message,
             user: userId, // Assuming you want to associate the post with the user
         });
 
