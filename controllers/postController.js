@@ -363,9 +363,6 @@ exports.PostRequirementAll = async (req, res) => {
 
             await handleCaching('fakeBuyers', BuyerFake, 'BuyerFake retrieved successfully', 'Error fetching Fake Buyers', req, res);
 
-        const fakeBuyers = await BuyerFake.find();
-    
-        res.status(200).json(fakeBuyers);
         } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
