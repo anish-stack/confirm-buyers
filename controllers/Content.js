@@ -1155,33 +1155,41 @@ exports.addFetureProduct = async (req, res) => {
     }
 };
 
-exports.getSingleProducts = async (req, res) => {
+exports.getSingleProduct = async (req, res) => {
     try {
         const { productid } = req.params;
-        
-        const cachedData = cache.get('singleProduct');
+        const cacheKey = `singleProduct:${productid}`;
 
-        if(cachedData){
+        const cachedData = cache.get(cacheKey);
+
+        if (cachedData) {
             console.log('Single-Product-Details data served from cache');
             return res.status(200).json({
                 success: true,
-                message: "Single-Product-Details retrieved successfully",
-                AllCallBack: cachedData,
+                message: 'Single-Product-Details retrieved successfully',
+                product: cachedData,
             });
         }
 
         const product = await FetureProduct.findById(productid);
-        cache.set('singleProduct', product, 7200);
-        
-        // Assuming you want to send the product as a response
-        res.json(product);
 
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+
+        // Update cache with the retrieved product
+        cache.set(cacheKey, product, 7200);
+
+        res.status(200).json({
+            success: true,
+            message: 'Single-Product-Details retrieved successfully',
+            product,
+        });
     } catch (error) {
-        // Handle the error, for example, send an error response
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error in getSingleProduct:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
-}
-
+};
 
 exports.updateFetureProduct = async (req, res) => {
     try {
