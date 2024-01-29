@@ -1158,27 +1158,13 @@ exports.addFetureProduct = async (req, res) => {
 exports.getSingleProducts = async (req, res) => {
     try {
         const { productid } = req.params;
-        const cacheKey = `singleProduct:${productid}`;
-
-        const cachedData = cache.get(cacheKey);
-
-        if (cachedData) {
-            console.log('Single-Product-Details data served from cache');
-            return res.status(200).json({
-                success: true,
-                message: 'Single-Product-Details retrieved successfully',
-                product: JSON.parse(getSingleProducts),
-            });
-        }
+       
 
         const product = await FetureProduct.findById(productid);
 
         if (!product) {
             return res.status(404).json({ success: false, message: 'Product not found' });
         }
-
-        // Update cache with the retrieved product
-        cache.set(cacheKey, product, 7200);
 
         res.status(200).json({
             success: true,
