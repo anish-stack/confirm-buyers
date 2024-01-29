@@ -15,7 +15,14 @@ const mongoDbUri = process.env.MONGOURL;
 // Middleware
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors())
+const corsOptions = {
+    origin: ['http://confirmByers.com', 'http://localhost:1537'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // enable credentials (if needed)
+    optionsSuccessStatus: 204, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParser()); // Add this line
 // app.use(protect);// Connect to Database
 connectDb(mongoDbUri);
