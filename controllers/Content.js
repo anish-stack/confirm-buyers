@@ -1167,7 +1167,7 @@ exports.getSingleProducts = async (req, res) => {
             return res.status(200).json({
                 success: true,
                 message: 'Single-Product-Details retrieved successfully',
-                product: cachedData,
+                product: JSON.parse(getSingleProducts),
             });
         }
 
