@@ -1155,7 +1155,7 @@ exports.addFetureProduct = async (req, res) => {
     }
 };
 
-exports.getSingleProduct = async (req, res) => {
+exports.getSingleProducts = async (req, res) => {
     try {
         const { productid } = req.params;
         const cacheKey = `singleProduct:${productid}`;
