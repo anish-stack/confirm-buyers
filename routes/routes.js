@@ -1,5 +1,6 @@
 const express = require('express');
 const { protect } = require('../middlewares/auth');
+const {categoryController,getCategory,updateCategory,deleteACatagory,deleteAll,singleProduct} = require('../controllers/categoryController')
 const {
     RegisterCompany,
     verifyOtp,
@@ -51,5 +52,14 @@ router.get("/buyers/:anyinput",anyFeatureProducts)
 router.post('/create-buyers',createFakeBuyers)
 router.get('/get-buyers',getFakeBuyers)
 router.delete('/delete-buyers/:buyerId',deleteFakeBuyers)
+
+
+router.post('/createcategory',categoryController)
+router.post('/updateCategory/:id',updateCategory)
+router.get('/getCategory',getCategory)
+router.get('/singleProduct/:id',singleProduct)
+router.delete('/deleteACatagory/:id',deleteACatagory)
+router.delete('/deleteAll',deleteAll)
+
 
 module.exports = router;
