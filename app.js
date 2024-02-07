@@ -16,7 +16,7 @@ const mongoDbUri = process.env.MONGOURL;
 app.use(bodyParser.json());
 app.use(express.json());
 const corsOptions = {
-    origin: ['https://confirmbuyers.com', 'www.confirmbuyers.com/','http://localhost:5173'],
+    origin: ['https://confirmbuyers.com', 'www.confirmbuyers.com/','http://localhost:5173','http://localhost:3000','https://cbadmin-six.vercel.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // enable credentials (if needed)
     optionsSuccessStatus: 204, // some legacy browsers (IE11, various SmartTVs) choke on 204
