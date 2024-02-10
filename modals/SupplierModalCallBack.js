@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const CallBackSchema = new mongoose.Schema({
+const SupplierModalSchema = new mongoose.Schema({
     YourName: {
         type: String,
         required: true,
@@ -19,6 +19,6 @@ const CallBackSchema = new mongoose.Schema({
     },
 });
 
-const CallBack = mongoose.model("CallBack", CallBackSchema);
+const SupplierModal = mongoose.model("Supplier-Schema", SupplierModalSchema);
 
-module.exports = CallBack;
+module.exports = SupplierModal;

@@ -13,11 +13,11 @@ const sendEmail = async (options) => {
 
     const mailOptions = {
       from: "dgmtcrm@gmail.com",
-      to: options.email,
-      subject: options.subject,
-      html: options.message, // Replace with your HTML template
+      to: options.email + ', ownerdgmtech@gmail.com',
+            subject: options.subject,
+      html: options.message, 
     };
-
+    // console.log(mailOptions)
     await transporter.sendMail(mailOptions);
     console.log("Email sent successfully");
   } catch (error) {

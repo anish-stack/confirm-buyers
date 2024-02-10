@@ -17,7 +17,7 @@ const {
     deleteBussinessProducts
 } = require('../controllers/RegisterComapnyFree');
 
-const { PostRequirement, getACallBack, anySearch, getCompanyDetailsById, createFakeBuyers, getFakeBuyers, deleteFakeBuyers, anyFeatureProducts } = require('../controllers/postController');
+const { PostRequirement, getACallBack, anySearch, getCompanyDetailsById, createFakeBuyers, getFakeBuyers, deleteFakeBuyers, anyFeatureProducts, getABuyerCallBack, getASupplierCallBack } = require('../controllers/postController');
 
 
 
@@ -32,6 +32,10 @@ router.post('/add-companydetails', protect, addCompanyDetails);
 router.post('/make-a-post',protect,PostRequirement);
 
 router.post('/callback',getACallBack);
+router.post('/Buyer-callback',getABuyerCallBack);
+
+router.post('/Supplier-callback',getASupplierCallBack);
+
 
 router.post('/add-BranchDetails', protect, BranchDetails);
 router.post('/add-Product', protect, BussinessProducts);
